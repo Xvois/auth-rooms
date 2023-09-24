@@ -3,12 +3,13 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
 export const dynamic = 'force-dynamic'
-
+// TODO: CHECK FOR USER WITH THE SAME USERNAME
 export async function POST(request: Request) {
   const requestUrl = new URL(request.url)
   const formData = await request.formData()
   const email = String(formData.get('email'))
   const password = String(formData.get('password'))
+  const display_name = String(formData.get('display_name'))
   const supabase = createRouteHandlerClient({ cookies })
 
   const { error } = await supabase.auth.signUp({
@@ -16,7 +17,11 @@ export async function POST(request: Request) {
     password,
     options: {
       emailRedirectTo: `${requestUrl.origin}/auth/callback`,
+      data: {
+        display_name
+      }
     },
+
   })
 
   if (error) {

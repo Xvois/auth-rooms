@@ -14,6 +14,12 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = createRouteHandlerClient({ cookies })
     await supabase.auth.exchangeCodeForSession(code)
+
+    const {data: {user}} = await supabase.auth.getUser();
+    if (user && user.user_metadata) {
+      console.info('Callback has attempted to created a profile for ', user.user_metadata.display_name);
+      await supabase.from('profiles').insert({id: user.id, display_name: user.user_metadata.display_name})
+    }
   }
 
   // URL to redirect to after sign in process completes
