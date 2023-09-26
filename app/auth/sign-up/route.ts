@@ -21,12 +21,13 @@ export async function POST(request: Request) {
         display_name
       }
     },
-
   })
 
-  if (error) {
+  const conflict = !!(await supabase.from('profiles').select(`display_name = ${display_name}`));
+
+  if (error || conflict) {
     return NextResponse.redirect(
-      `${requestUrl.origin}/login?error=Could not authenticate user`,
+      `${requestUrl.origin}/login?error=Could not authenticate user ${conflict && '(username is already in use)'}`,
       {
         // a 301 status is required to redirect from a POST to a GET route
         status: 301,

@@ -2,6 +2,8 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import Messages from "@/components/Messages";
 import BackButton from "@/components/BackButton";
+import Link from "next/link";
+import { buttonVariants } from "@/components/ui/button"
 
 export default function Login() {
 
@@ -22,6 +24,9 @@ export default function Login() {
 
                 <Button formAction={'/auth/sign-in'} formMethod={"post"}>Login</Button>
             </form>
+
+            <p>Don't have an account?</p>
+            <Link className={buttonVariants({ variant: "outline" })} href={'/register'}>Register</Link>
 
             <Messages />
         </div>
