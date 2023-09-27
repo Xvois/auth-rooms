@@ -4,11 +4,13 @@ import {createServerComponentClient} from "@supabase/auth-helpers-nextjs";
 import {cookies} from "next/headers";
 import {revalidatePath} from "next/cache";
 import {NextResponse} from "next/server";
+import {redirect} from "next/navigation";
 
 // TODO: GET BETTER ERROR HANDLING
 // TODO: GET DYNAMIC PATH REVALIDATION
 
 export async function createRoom(formData: FormData) {
+    console.info('Create room called.')
     const supabase = createServerComponentClient({cookies});
     const room_name = String(formData.get('create_room_name'));
     const {data: {user}} = await supabase.auth.getUser();
@@ -23,7 +25,7 @@ export async function createRoom(formData: FormData) {
             });
             // FIXME: HANDLE ERRORS
             if (!membershipError) {
-                revalidatePath('/');
+                return redirect(`/room/${room[0].id}`);
             } else {
                 console.error('membershipError');
             }

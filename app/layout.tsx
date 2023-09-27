@@ -1,4 +1,5 @@
 import './globals.css'
+import NavigationBar from "@/components/NavigationBar";
 
 export const metadata = {
   title: 'Auth Rooms',
@@ -13,6 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+      <NavigationBar />
         <main className="min-h-screen bg-background flex flex-col items-center">
           {children}
         </main>
