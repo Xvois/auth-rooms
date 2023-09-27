@@ -79,7 +79,7 @@ export default async function RoomDisplay(props: { client?: SupabaseClient<Datab
                 </TableHeader>
                 <TableBody>
                     {rooms.map(room => {
-                        return <TableRow>
+                        return <TableRow key={room.id}>
                             <TableCell>{room.name}</TableCell>
                             <TableCell>
                                 <CompactUser user={ownersMap.get(room.owner_id)}/>

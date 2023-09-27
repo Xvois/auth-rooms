@@ -24,9 +24,6 @@ export default async function Index() {
 
     const verifiedUser = user as User;
 
-    const {data: allRooms} = await supabase.from('rooms').select('*');
-
-
     return (
         <div className="w-full flex flex-col items-center max-w-xl">
 
@@ -46,12 +43,6 @@ export default async function Index() {
                     <Input name={'delete_room_id'} type={'text'}/>
                     <Button formAction={deleteRoom}>Delete room</Button>
                 </form>
-                <div>
-                    <h2>All rooms: </h2>
-                    {allRooms && allRooms.map(room => {
-                        return <p>"{room.name}" : {room.id}</p>
-                    })}
-                </div>
                 <RoomDisplay />
             </div>}
         </div>

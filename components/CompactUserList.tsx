@@ -8,7 +8,7 @@ export default function CompactUserList(props: { users: Profile[], max?: number 
         <div className={'inline-flex h-max w-full justify-center'}>
             {users.slice(0,max-1).map((user, id) => {
                 return (
-                    <div className={`mx-[-15px] z-[${id + 1}] h-[40px]`}>
+                    <div key={user.id} className={`mx-[-15px] z-[${id + 1}] h-[40px]`}>
                         <CompactUser {...{user}} />
                     </div>
                 )

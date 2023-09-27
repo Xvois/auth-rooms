@@ -43,7 +43,7 @@ export default async function NavigationBar() {
                 <div className={'inline-flex gap-2 p-4 items-center'}>
                     {links.map(link => {
                         if (loggedIn && link.loggedIn || !loggedIn && link.loggedOut) {
-                            return <Link className={buttonVariants({variant: "outline"})}
+                            return <Link key={link.href} className={buttonVariants({variant: "outline"})}
                                          href={link.href}>{link.title}</Link>
                         }
                     })
