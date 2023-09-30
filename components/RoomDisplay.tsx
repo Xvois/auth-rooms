@@ -8,6 +8,7 @@ import CompactUser from "@/components/CompactUser";
 import Link from "next/link";
 import {buttonVariants} from "@/components/ui/button";
 import CompactUserList from "@/components/CompactUserList";
+import {getMembershipMap, getOwner} from "@/lib/rooms";
 
 export default async function RoomDisplay(props: { client?: SupabaseClient<Database>, passedUser?: User }) {
     const {client, passedUser} = props;
@@ -17,45 +18,12 @@ export default async function RoomDisplay(props: { client?: SupabaseClient<Datab
     const {data: roomData} = await supabase.from('profiles').select('rooms (*)')
     const rooms = roomData ? roomData.map((row) => row.rooms).flat() : [];
 
-    const membershipPromises = rooms.map(function (r) {
-            return supabase.from('rooms')
-                .select('id, profiles (*)').eq('id', r.id);
-        }
-    );
-    // FIXME: not tested on multiple users
-    // Use Promise.all to resolve all promises in the array of objects
-    const membershipResults = (await Promise.all(membershipPromises)).map(m => m.data).flat();
-    const membershipsMap = new Map();
-    membershipResults.forEach(function (m) {
-        if (m) {
-            // Check if it's simply an object (i.e only 1 item)
-            if (typeof m.profiles === 'object' && !Array.isArray(m.profiles)) {
-                membershipsMap.set(m.id, [m.profiles]);
-            } else {
-                membershipsMap.set(m.id, m.profiles);
-            }
-        }
-    });
-
-    // A helper function to get the owner profile from a room.
-    const getOwner = (room: { owner_id: string }) => {
-        return supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', room.owner_id)
-            .then((result) => {
-                if (result.error) {
-                    throw new Error(`Failed to get owner: ${result.error.message}`);
-                }
-                // Weird issue; types match but TS throws an error.
-                return result.data[0] as Profile;
-            });
-    };
+    const membershipsMap = await getMembershipMap(supabase, rooms);
 
     // Prevents duplicates by using a set.
     const ownerPromisesSet: Set<PromiseLike<Profile>> = new Set();
     rooms.forEach((room) => {
-        ownerPromisesSet.add(getOwner(room));
+        ownerPromisesSet.add(getOwner(supabase, room));
     });
     const ownerPromises = Array.from(ownerPromisesSet);
     const owners = await Promise.all(ownerPromises);

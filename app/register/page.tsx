@@ -6,6 +6,7 @@ import BackButton from '@/components/BackButton';
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from '@/components/ui/form';
 import {Input} from '@/components/ui/input';
 import {Button} from '@/components/ui/button';
+import Messages from "@/components/Messages";
 
 export default function Register() {
     const registerSchema = z.object({
@@ -103,6 +104,7 @@ export default function Register() {
                     <Button formAction={'/auth/sign-up'} formMethod={"post"} aria-label="Register">Register</Button>
                 </form>
             </Form>
+            <Messages />
         </div>
     );
 }

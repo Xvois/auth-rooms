@@ -3,7 +3,7 @@ import {cookies} from 'next/headers'
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
-import {createRoom, deleteRoom, joinRoom} from "@/actions/rooms";
+import {createRoom, deleteRoom} from "@/actions/rooms";
 import ProfileDisplay from "@/components/ProfileDisplay";
 import {Database} from "@/types/supabase";
 import RoomDisplay from "@/components/RoomDisplay";
@@ -28,7 +28,10 @@ export default async function Index() {
         <div className="w-full flex flex-col items-center max-w-xl">
 
             {user && <div className={'inline-flex flex-col gap-2'}>
-                <ProfileDisplay client={supabase} passedUser={verifiedUser} />
+                <form>
+                    <Button formAction={'/auth/sign-out'} formMethod={"post"}>Sign out</Button>
+                </form>
+                <ProfileDisplay client={supabase} passedUser={verifiedUser} editable={true}/>
                 <form className={'inline-flex flex-col gap-2'}>
                     <Label htmlFor={'create_room_name'}>Name</Label>
                     <Input name={'create_room_name'} type={'text'}/>
@@ -43,7 +46,7 @@ export default async function Index() {
                     <Input name={'delete_room_id'} type={'text'}/>
                     <Button formAction={deleteRoom}>Delete room</Button>
                 </form>
-                <RoomDisplay />
+                <RoomDisplay/>
             </div>}
         </div>
     )

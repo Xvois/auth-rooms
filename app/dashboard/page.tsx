@@ -16,12 +16,16 @@ export default async function Dashboard() {
     }
 
     return (
-        <div>
-            <ProfileDisplay client={supabase} passedUser={user}/>
-            <div className={'inline-flex flex-col gap-2 p-4'}>
-                <RoomDisplay client={supabase} passedUser={user}/>
-                <JoinRoomModal />
-                <CreateRoomModal />
+        <div className={'inline-flex w-full justify-between'}>
+            <div className={'float-left'}>
+                <ProfileDisplay client={supabase} passedUser={user} editable={true}/>
+            </div>
+            <div className={'grid'}>
+                <div className={'inline-flex flex-col gap-2 p-4'}>
+                    <RoomDisplay client={supabase} passedUser={user}/>
+                    <JoinRoomModal/>
+                    <CreateRoomModal/>
+                </div>
             </div>
         </div>
     )

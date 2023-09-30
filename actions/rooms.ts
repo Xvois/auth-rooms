@@ -1,4 +1,7 @@
 'use server'
+/**
+ * For server side mutations on rooms.
+ */
 
 import {createServerComponentClient} from "@supabase/auth-helpers-nextjs";
 import {cookies} from "next/headers";
